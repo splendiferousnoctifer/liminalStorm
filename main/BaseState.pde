@@ -1,6 +1,6 @@
 
-class BaseState
-{
+class BaseState {
+  
   BaseState() {
   }
   

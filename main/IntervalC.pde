@@ -5,9 +5,8 @@ class StateC extends BaseState {
     super();
   }
   
-  StateC(StateMgr _stateMgr, int _idOfStateA) {
-    super(_stateMgr); 
-    idOfStateA = _idOfStateA;
+  StateC(StateMgr _stateMgr, int _duration, String _startFrame) {
+    super(_stateMgr, _duration, _startFrame); 
   }
   
   void draw() {
