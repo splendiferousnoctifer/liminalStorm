@@ -14,7 +14,7 @@ class Leaves extends BaseState {
     rect(0, 0, width, height);   
     
     //I guess thats Leaves?
-    if(osCompatible) drawPath(img2);
+    //if(osCompatible) drawPath(img2);
 
   }
 }

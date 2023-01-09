@@ -85,7 +85,7 @@ void setup() {
   
   if (debug){
     splitDurations = new int[] {30000,30000,30000};
-    splitOrder = new int[] {1, 3};
+    splitOrder = new int[] {3, 1};
   } else {
     splitDurations = timeSplit.splitInterval();
     splitOrder = timeSplit.assignNumbers(splitDurations);
@@ -123,6 +123,29 @@ void draw() {
   } else if (stateMgr.getTimeInState() > splitDurations[currentID] && currentID < splitDurations.length){ //<>//
     stateMgr.setState(stateMgr.nextStateID(currentID));
   } 
+  
+  print(currentID);
+  
+  if(osCompatible) {
+    switch (currentID) {
+        case 0: //grass
+          drawSpringPath(fl1);
+          break;
+        case 1: //rain
+          drawRainPath(img3);
+          break;
+        case 2: //leaves
+          drawPath(img2);
+          break;
+        case 3: //snow
+          drawWinterPath(w1);
+          break;
+        case 4: //storm
+          break;
+     }
+  }
+  
+  
 }
 
 void stateOrder(int[] order, int[] durations) {

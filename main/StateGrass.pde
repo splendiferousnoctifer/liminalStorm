@@ -27,7 +27,7 @@ class Grass extends BaseState {
     grassFloor();
     grassWall();
     
-    if(osCompatible) drawSpringPath(fl1);
+    //if(osCompatible) drawSpringPath(fl1);
 
   } 
   
