@@ -72,7 +72,7 @@ class Rain extends BaseState{
       puddles[i].grow();
     }
     
-    if(osCompatible) drawRainPath(img3);
+    //if(osCompatible) drawRainPath(img3);
   }
   
   void setGradient(int x, int y, float w, float h, color c1, color c2) {  

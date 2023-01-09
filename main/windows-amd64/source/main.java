@@ -64,6 +64,7 @@ int STORM;
 int END;
 
 int[] splitDurations, splitOrder;
+int entireDuration;
 
 StateMgr stateMgr;
 TimeSplit timeSplit;
@@ -81,6 +82,8 @@ TimeSplit timeSplit;
 }
 
  public void setup() {
+  loadImages();
+  //load();
   switch (operatingSystem) {
     case "Windows":
       osCompatible = true;     
@@ -89,7 +92,7 @@ TimeSplit timeSplit;
       osCompatible = false;
       break;
     default:
-      osCompatible = false;
+      osCompatible = true;
       break;
   }
   
@@ -117,8 +120,8 @@ TimeSplit timeSplit;
   noStroke();
   
   if (debug){
-    splitDurations = new int[] {30000,30000,30000};
-    splitOrder = new int[] {1, 3};
+    splitDurations = new int[] {30000,30000,30000,30000};
+    splitOrder = new int[] {1,3,2};
   } else {
     splitDurations = timeSplit.splitInterval();
     splitOrder = timeSplit.assignNumbers(splitDurations);
@@ -131,18 +134,15 @@ TimeSplit timeSplit;
   
   END = stateMgr.addState(new End(stateMgr, 10000));
   
-  stateMgr.setState(GRASS);
+  stateMgr.setState(GRASS);  
   
-  
-  
+  entireDuration = 0;
+  for (int num : splitDurations) {entireDuration += num;}
   
   println("Time Intervals: ", Arrays.toString(splitDurations));
   println("Order of Intervals: ", Arrays.toString(splitOrder));
-  
   println("Setup Done! \n");
-
-
-
+  
 }
 
  public void draw() {
@@ -153,9 +153,41 @@ TimeSplit timeSplit;
   
   if ( currentID == splitDurations.length) {
     stateMgr.setState(END);
-  } else if (stateMgr.getTimeInState() > splitDurations[currentID] && currentID < splitDurations.length){ //<>//
+  } else if (stateMgr.getTimeInState() > splitDurations[currentID] && currentID < splitDurations.length){
     stateMgr.setState(stateMgr.nextStateID(currentID));
   } 
+  
+  int currentState = (currentID == 0 || currentID > 4) ? 0 : splitOrder[currentID-1];
+    
+  switch (currentState) {
+      case 0: //grass
+        drawSpringPath(fl1);
+        break;
+      case 1: //rain
+        drawRainPath(img3);
+        break;
+      case 2: //leaves
+        drawPath(img2);
+        break;
+      case 3: //snow
+        drawWinterPath(w1);
+        break;
+      case 4: //storm
+        break;
+   }
+
+  //ToDo: Audio system
+  /*
+  while(millis() <= entireDuration){
+    // intervals for audio file switching
+    if(millis()%interval == 0){
+       // loading takes some time, chooses new file about every 10 - 15 seconds
+      sound.play(); // iterates through files of array
+      break;
+    }  
+  }*/
+  
+  
 }
 
  public void stateOrder(int[] order, int[] durations) {
@@ -224,6 +256,15 @@ TimeSplit timeSplit;
   w1.resize(0,screen_cursor);
   winter = new SoundFile(this, wPath);
 }
+
+ public void load(){
+  sound = new SoundFile(this, chooseAudioFile(audioFiles));
+}
+  
+ public String chooseAudioFile(String[] files){
+  int r =PApplet.parseInt(random(files.length));
+  return files[r];
+}
 PImage image;
 String imgPath = "images/FootLeaves.png"; // one footprint
 
@@ -261,7 +302,16 @@ String wPath = "sound/snowCrunch_single.mp3";
 int screen_cursor = 25;
 
 SoundFile file;
+SoundFile sound;
+SoundFile sound2;
+
 String soundPath = "sound/leaves_crunching.mp3";//"sound/rain_drops_little_thunder.mp3";
+
+String s1 = "sound/snowCrunch_single.mp3";
+String s2 = "sound/grass_walking.wav";
+String s3 = "sound/leaves_crunching.mp3";
+String s4 = "sound/rain_drops_little_thunder.mp3";
+String s5= "sound/rain_thunder.mp3";
 class StateMgr {
  
   BaseState[] states;
@@ -993,6 +1043,7 @@ int diameterx =  PApplet.parseInt(random(15,25));
 
 
  public void drawRainPath(PImage image){
+
   // defines the number of images drawn, when the limit is reached the oldest ones are "deleted"
   int maxPoints = 100; // change accordingly
   //imageMode(CENTER);
@@ -1186,6 +1237,11 @@ int cols = floor(windowWidth / scl) + 1;
 int rowsWall = round(wallHeight/3 / scl) + 1;
 int rowsFloor = round(wallHeight/scl) + 1;
 
+// array with file paths
+String[] audioFiles = {s1, s2, s3, s4, s5};
+
+int interval;
+
 class Grass extends BaseState {
   
   Grass() {
@@ -1194,19 +1250,26 @@ class Grass extends BaseState {
   
   Grass(StateMgr _stateMgr, int _duration) {
     super(_stateMgr, _duration); 
+    interval = duration / audioFiles.length;
   }
   
    public void draw() {
     clear();
     background(73, 106, 45);
+
     setGradient(0, 0, width, height/2, color(177, 213, 174), color(73, 106, 45));
     
     grassFloor();
     grassWall();
     
-    if(osCompatible) drawSpringPath(fl1);
+    text((int)frameRate + " FPS", width / 2, 100);
+
+
+    //if(osCompatible) drawSpringPath(fl1);
 
   } 
+  
+  
   
    public void grassFloor(){
     float yoff = 0;
@@ -1264,7 +1327,28 @@ class Grass extends BaseState {
     }
   }
   
+  
+  
 }
+//Foliage Variables
+int amountFol = 1000;
+float [] xPosFol = new float[amountFol];
+float [] yPosFol = new float[amountFol];
+float [] dFol = new float[amountFol]; //Size
+int [] rotFol = new int[amountFol]; //Rotation
+int minFSizeFol = 2;
+int maxFSizeFol = 10;
+
+//Leaves Variables
+int amountLeaves=500; // number of snowflakes
+float [] xPosLeaves = new float[amountLeaves];
+float [] yPosLeaves = new float[amountLeaves];
+int [] d = new int[amountLeaves]; //Size
+int [] speedLeaves = new int[amountLeaves]; //Speed
+int [] rot = new int[amountLeaves]; //Rotation
+int minFSizeLeaves = 2;
+int maxFSizeLeaves = 10;
+
 
 class Leaves extends BaseState {
   
@@ -1274,17 +1358,92 @@ class Leaves extends BaseState {
   
   Leaves(StateMgr _stateMgr, int _duration) {
     super(_stateMgr, _duration); 
+    
+    //Fill Leaves Arrays
+    for(int i = 0; i < amountLeaves; i++) { //Creates four arrays with a box for each value
+      rot[i] = round(random(0, 360));
+      xPosLeaves[i] = random(0, width);
+      yPosLeaves[i] = random(0, wallHeight);
+      d[i] = round(random(minFSizeLeaves, maxFSizeLeaves));
+      speedLeaves[i] = round(random(0, 1));
+    }
+    
+    //Fill Foliage Arrays
+    for (int i = 0; i < amountFol; i++){
+      xPosFol[i] = random(0, width);
+      yPosFol[i] = random(0, wallHeight);
+      dFol[i] = round(random(minFSizeFol, maxFSizeFol));
+      rotFol[i] = round(random(0, 360));
+    }
   }
   
    public void draw() {
-    fill(165,42,42);
-    rect(0, 0, width, height);   
+    clear();
+    background(209, 133, 46);
+    
+    setGradient(0, 0, width, wallHeight, color(223, 193, 158), color(209, 133, 46));
+    text((int)frameRate + " FPS", width / 2, 10);
+  
+    //FALLING LEAVES
+    for(int i = 0; i < xPosLeaves.length; i++) {
+  
+      noFill();
+      stroke(255);
+      strokeWeight(1);
+      rotate(rot[i]);
+      quad(xPosLeaves[i], yPosLeaves[i], xPosLeaves[i]+d[i], yPosLeaves[i]+(d[i]*2), xPosLeaves[i], yPosLeaves[i]+(d[i]*3), xPosLeaves[i]-d[i], yPosLeaves[i]+(d[i]*2));
+     
+      //Creates movement on the x-axis
+      if(speedLeaves[i] == 0) {
+        xPosLeaves[i] += map(rot[i], minFSizeLeaves, maxFSizeLeaves, .1f, .5f); 
+      } else {
+        xPosLeaves[i] -= map(rot[i], minFSizeLeaves, maxFSizeLeaves, .1f, .5f);
+      }
+     
+      //Keep adding size of flake to speed to create movement in the y-axis
+      yPosLeaves[i] += (d[i] + speedLeaves[i])/3;  
+      
+  
+     //Creates endless loop of flakes
+      if(xPosLeaves[i] > width + rot[i] || xPos[i] < -rot[i] || yPosLeaves[i] > wallHeight + rot[i]) {
+        xPos[i] = random(0, width);
+        yPosLeaves[i] = -rot[i];
+      }  
+    }
+    
+    //FOLIAGE
+    for(int i = 0; i < xPosFol.length; i++) {
+      stroke(255);
+      noFill();
+      rotate(rotFol[i]);
+      //Scale leaf
+      int m = millis();
+      if (m < 1500){
+        if(dFol[i]>5){
+           dFol[i] -= .2f;
+        }
+      }
+      quad(xPosFol[i], yPosFol[i], xPosFol[i]+dFol[i], yPosFol[i]+(dFol[i]*2), xPosFol[i], yPosFol[i]+(dFol[i]*3), xPosFol[i]-dFol[i], yPosFol[i]+(dFol[i]*2));
+    }   
+    
     
     //I guess thats Leaves?
-    if(osCompatible) drawPath(img2);
+    //if(osCompatible) drawPath(img2);
 
   }
 }
+
+
+ public void setGradient(int x, int y, float w, float h, int c1, int c2) {  
+  for (int i = y; i <= y+h; i++) {
+    float inter = map(i, y, y+h, 0, 1);
+    int c = lerpColor(c1, c2, inter);
+    strokeWeight(2);
+    stroke(c);
+    line(x, i, x+w, i);
+  }
+}
+
 int amountIntervals = 4; //minimum 3
 
 //Drops Variables
@@ -1359,7 +1518,7 @@ class Rain extends BaseState{
       puddles[i].grow();
     }
     
-    if(osCompatible) drawRainPath(img3);
+    //if(osCompatible) drawRainPath(img3);
   }
   
    public void setGradient(int x, int y, float w, float h, int c1, int c2) {  
@@ -1528,14 +1687,14 @@ class Snow extends BaseState {
       }  
     } 
     
-    int timeNow = super.stateMgr.getTimeInState();
     int start = super.stateMgr.stateStamp;
+    int timeNow = millis();//super.stateMgr.getTimeInState();
     int end = start + duration;
     int drawAmount;
     
     //Draw floor Snow with increasing time by mapping it to the duration
-    if(timeNow < duration/2){
-      drawAmount = (int) map(timeNow, start, end, 0, amountFlakes);  
+    if(timeNow < duration/2+start + 100){
+      drawAmount = (int) map(timeNow, start, end - duration/2, 0, amountFlakes); 
     } else {
       drawAmount = amountFlakes;
       int alpha = (int)map(timeNow,start + PApplet.parseInt(duration/2), end, 0,255);
@@ -1543,13 +1702,15 @@ class Snow extends BaseState {
       rect(0, wallHeight, width, windowHeight);
     } 
     
+    if(drawAmount > amountFlakes) drawAmount = amountFlakes-1;
+    
     for (int i = 0; i<drawAmount;i++){
         noStroke();
         fill(255);
         ellipse(snowFloor[i][0], snowFloor[i][1],5,5);
     }
     
-    if(osCompatible) drawWinterPath(w1);
+    //if(osCompatible) drawWinterPath(w1);
   } 
   
    public void setGradient(int x, int y, float w, float h, int c1, int c2) {  

@@ -66,14 +66,14 @@ class Snow extends BaseState {
       }  
     } 
     
-    int timeNow = super.stateMgr.getTimeInState();
     int start = super.stateMgr.stateStamp;
+    int timeNow = millis();//super.stateMgr.getTimeInState();
     int end = start + duration;
     int drawAmount;
     
     //Draw floor Snow with increasing time by mapping it to the duration
-    if(timeNow < duration/2){
-      drawAmount = (int) map(timeNow, start, end, 0, amountFlakes);  
+    if(timeNow < duration/2+start + 100){
+      drawAmount = (int) map(timeNow, start, end - duration/2, 0, amountFlakes); 
     } else {
       drawAmount = amountFlakes;
       int alpha = (int)map(timeNow,start + int(duration/2), end, 0,255);
@@ -81,13 +81,15 @@ class Snow extends BaseState {
       rect(0, wallHeight, width, windowHeight);
     } 
     
+    if(drawAmount > amountFlakes) drawAmount = amountFlakes-1;
+    
     for (int i = 0; i<drawAmount;i++){
         noStroke();
         fill(255);
         ellipse(snowFloor[i][0], snowFloor[i][1],5,5);
     }
     
-    if(osCompatible) drawWinterPath(w1);
+    //if(osCompatible) drawWinterPath(w1);
   } 
   
   void setGradient(int x, int y, float w, float h, color c1, color c2) {  

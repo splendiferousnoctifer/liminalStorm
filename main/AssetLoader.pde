@@ -35,6 +35,9 @@ String wPath = "sound/snowCrunch_single.mp3";
 int screen_cursor = 25;
 
 SoundFile file;
+SoundFile sound;
+SoundFile sound2;
+
 String soundPath = "sound/leaves_crunching.mp3";//"sound/rain_drops_little_thunder.mp3";
 
 String s1 = "sound/snowCrunch_single.mp3";

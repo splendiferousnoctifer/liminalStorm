@@ -274,6 +274,7 @@ void drawSpringPath(PImage image){
 
 
 void drawRainPath(PImage image){
+
   // defines the number of images drawn, when the limit is reached the oldest ones are "deleted"
   int maxPoints = 100; // change accordingly
   //imageMode(CENTER);

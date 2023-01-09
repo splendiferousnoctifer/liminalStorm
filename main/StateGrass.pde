@@ -28,14 +28,20 @@ class Grass extends BaseState {
   void draw() {
     clear();
     background(73, 106, 45);
+
     setGradient(0, 0, width, height/2, color(177, 213, 174), color(73, 106, 45));
     
     grassFloor();
     grassWall();
     
+    text((int)frameRate + " FPS", width / 2, 100);
+
+
     //if(osCompatible) drawSpringPath(fl1);
 
   } 
+  
+  
   
   void grassFloor(){
     float yoff = 0;
@@ -92,5 +98,7 @@ class Grass extends BaseState {
       line(x, i, x+w, i);
     }
   }
+  
+  
   
 }

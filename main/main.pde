@@ -31,6 +31,7 @@ int STORM;
 int END;
 
 int[] splitDurations, splitOrder;
+int entireDuration;
 
 StateMgr stateMgr;
 TimeSplit timeSplit;
@@ -49,6 +50,7 @@ void settings()
 
 void setup() {
   loadImages();
+  //load();
   switch (operatingSystem) {
     case "Windows":
       osCompatible = true;     
@@ -57,7 +59,7 @@ void setup() {
       osCompatible = false;
       break;
     default:
-      osCompatible = false;
+      osCompatible = true;
       break;
   }
   
@@ -101,6 +103,9 @@ void setup() {
   
   stateMgr.setState(GRASS);  
   
+  entireDuration = 0;
+  for (int num : splitDurations) {entireDuration += num;}
+  
   println("Time Intervals: ", Arrays.toString(splitDurations));
   println("Order of Intervals: ", Arrays.toString(splitOrder));
   println("Setup Done! \n");
@@ -119,26 +124,35 @@ void draw() {
     stateMgr.setState(stateMgr.nextStateID(currentID));
   } 
   
-  int currentState = (currentID != 0 || currentID > 4) ? 0 : splitOrder[currentID+1];
+  int currentState = (currentID == 0 || currentID > 4) ? 0 : splitOrder[currentID-1];
     
-  if(osCompatible) {
-    switch (currentState) {
-        case 0: //grass
-          drawSpringPath(fl1);
-          break;
-        case 1: //rain
-          drawRainPath(img3);
-          break;
-        case 2: //leaves
-          drawPath(img2);
-          break;
-        case 3: //snow
-          drawWinterPath(w1);
-          break;
-        case 4: //storm
-          break;
-     }
-  }
+  switch (currentState) {
+      case 0: //grass
+        drawSpringPath(fl1);
+        break;
+      case 1: //rain
+        drawRainPath(img3);
+        break;
+      case 2: //leaves
+        drawPath(img2);
+        break;
+      case 3: //snow
+        drawWinterPath(w1);
+        break;
+      case 4: //storm
+        break;
+   }
+
+  //ToDo: Audio system
+  /*
+  while(millis() <= entireDuration){
+    // intervals for audio file switching
+    if(millis()%interval == 0){
+       // loading takes some time, chooses new file about every 10 - 15 seconds
+      sound.play(); // iterates through files of array
+      break;
+    }  
+  }*/
   
   
 }
@@ -208,4 +222,13 @@ void loadImages(){
   w1 = loadImage(winterImg);
   w1.resize(0,screen_cursor);
   winter = new SoundFile(this, wPath);
+}
+
+void load(){
+  sound = new SoundFile(this, chooseAudioFile(audioFiles));
+}
+  
+String chooseAudioFile(String[] files){
+  int r =int(random(files.length));
+  return files[r];
 }
