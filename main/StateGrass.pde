@@ -9,6 +9,11 @@ int cols = floor(windowWidth / scl) + 1;
 int rowsWall = round(wallHeight/3 / scl) + 1;
 int rowsFloor = round(wallHeight/scl) + 1;
 
+// array with file paths
+String[] audioFiles = {s1, s2, s3, s4, s5};
+
+int interval;
+
 class Grass extends BaseState {
   
   Grass() {
@@ -17,6 +22,7 @@ class Grass extends BaseState {
   
   Grass(StateMgr _stateMgr, int _duration) {
     super(_stateMgr, _duration); 
+    interval = duration / audioFiles.length;
   }
   
   void draw() {

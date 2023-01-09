@@ -72,14 +72,16 @@ class Snow extends BaseState {
     int drawAmount;
     
     //Draw floor Snow with increasing time by mapping it to the duration
-    if(timeNow < duration/2+start){
-      drawAmount = (int) map(timeNow, start, end, 0, amountFlakes);  
+    if(timeNow < duration/2+start + 100){
+      drawAmount = (int) map(timeNow, start, end - duration/2, 0, amountFlakes); 
     } else {
       drawAmount = amountFlakes;
       int alpha = (int)map(timeNow,start + int(duration/2), end, 0,255);
       fill(255,alpha);
       rect(0, wallHeight, width, windowHeight);
     } 
+    
+    if(drawAmount > amountFlakes) drawAmount = amountFlakes-1;
     
     for (int i = 0; i<drawAmount;i++){
         noStroke();

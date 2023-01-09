@@ -48,6 +48,7 @@ void settings()
 }
 
 void setup() {
+  loadImages();
   switch (operatingSystem) {
     case "Windows":
       osCompatible = true;     
@@ -84,8 +85,8 @@ void setup() {
   noStroke();
   
   if (debug){
-    splitDurations = new int[] {30000,30000,30000};
-    splitOrder = new int[] {3, 1};
+    splitDurations = new int[] {30000,30000,30000,30000};
+    splitOrder = new int[] {1,3,2};
   } else {
     splitDurations = timeSplit.splitInterval();
     splitOrder = timeSplit.assignNumbers(splitDurations);
@@ -98,18 +99,12 @@ void setup() {
   
   END = stateMgr.addState(new End(stateMgr, 10000));
   
-  stateMgr.setState(GRASS);
-  
-  
-  
+  stateMgr.setState(GRASS);  
   
   println("Time Intervals: ", Arrays.toString(splitDurations));
   println("Order of Intervals: ", Arrays.toString(splitOrder));
-  
   println("Setup Done! \n");
-
-
-
+  
 }
 
 void draw() {
@@ -124,10 +119,10 @@ void draw() {
     stateMgr.setState(stateMgr.nextStateID(currentID));
   } 
   
-  print(currentID);
-  
+  int currentState = (currentID != 0 || currentID > 4) ? 0 : splitOrder[currentID+1];
+    
   if(osCompatible) {
-    switch (currentID) {
+    switch (currentState) {
         case 0: //grass
           drawSpringPath(fl1);
           break;
