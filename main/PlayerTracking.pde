@@ -8,13 +8,12 @@ import processing.sound.SoundFile;
 import java.awt.Point;
 
 PharusClient pc;
-float stepDistance = 3; // distance between player steps
-
-float lastTime = 0;
-float delta = 0;
-float timeInMs = 12; // small delay to let the sound play
-
-
+float stepDistance = 30; // distance between player steps
+int maxPoints = 300;
+int pxOffset = -10;
+int pyOffset = -5;
+float visibility = 1.5;
+boolean isFading = true;
 
 void initPlayerTracking()
 {
@@ -103,302 +102,131 @@ void pharusPlayerRemoved(Player player)
 
 
 PImage img;
-
-// added for liminal storm
-// takes path to image as an argument for drawing footprints
-void drawFootprints(PImage img, PImage singlePrint) 
-{
-  
-  int maxPoints = 30; //TODO adapt dynamically to number of players
-  
-  // reference for hashmap: https://processing.org/reference/HashMap.html
-  for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
-  { 
-    Player p = playersEntry.getValue();
-    
-      // show the feet of each track
-        if (p.getNumPathPoints() > 1) {
-          int numPoints = p.getNumPathPoints();
-           
-          float startX = p.getPathPointX(numPoints - 1);
-          float startY = p.getPathPointY(numPoints - 1);
-          
-          /*file.play();
-          file.stop();
-          file.play();
-          file.stop();*/
-          for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--) 
-          {
-            float endX = p.getPathPointX(pointID);
-            float endY = p.getPathPointY(pointID);
-            if(dist(startX,startY,endX,endY)>stepDistance){
-              for (Foot f : p.feet) {
-                translate(endX,endY);
-                float a = atan2(endY-startY,endX-startX) + radians(90);
-                rotate(a);
-                //file.play();
-                //file.stop();
-                //image(img, f.x, f.y); // TODO: load individual footsteps image
-                //rect(f.x, f.y, cursor_size / 3, cursor_size / 3);
-                image(img, startX, startY); // both footprints
-            }
-            startX = endX;
-            startY = endY;
-          }
-          
-        
-        }
-      }
-  }
-}
-
-
-
 void drawPath(PImage image){
   // defines the number of images drawn, when the limit is reached the oldest ones are "deleted"
-  int maxPoints = 100; // change accordingly
-  //imageMode(CENTER);
-  
+
   for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
   {
     Player p = playersEntry.getValue();
-    delta = millis()- lastTime;
-    // render path of each track
+    float transparency = 255;
+    int numPoints = p.getNumPathPoints();
     
-    if (p.getNumPathPoints() > 1)
-      {
-        stroke(70, 100, 150, 25.0f);        
-        int numPoints = p.getNumPathPoints();
-        
-        // show the motion path of each track on the floor    
-        float startX = p.getPathPointX(numPoints - 1);
-        float startY = p.getPathPointY(numPoints - 1);
-         
-        file.stop();
-       
-        for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--) 
+    if(numPoints >1){
+      float startX = p.getPathPointX(numPoints - 1);
+      float startY = p.getPathPointY(numPoints - 1);
+     
+     for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--) 
         {
-            float endX = p.getPathPointX(pointID);
-            float endY = p.getPathPointY(pointID);
-          if(dist(startX,startY,endX,endY)>stepDistance){
-        
-           
-            if(delta == timeInMs){
-              file.loop(); // Loops over audio file
-              break;
-            }
-           
-            float a = atan2(endY-startY,endX-startX); //+ radians(90);
-            image(image, startX, startY);
-           // translate(endX,endY); // TRANSLATION ISSUE
-             //rotate(a);
-            //image(image, startX, startY);
-            //image(image, startX, startY);
-            //file.stop();
-            //print("a:" + a + " ");
+          float endX = p.getPathPointX(pointID);
+          float endY = p.getPathPointY(pointID);
+          if (transparency > 0 && isFading) { transparency -=visibility; }
+          
+          if(pointID%stepDistance==0){
             
-            // play snow crunch sound here
-             //line(startX, startY, endX, endY);
-          }
-          startX = endX;
-          startY = endY;
-          
-          
-          //fill(0);
-         // file.play();
-        
-          
-        }
-      }
-      lastTime = millis();
+            if(isFading){
+             tint(255, transparency);
+            }
+             image(image,startX,startY);
+
+          } 
+           startX = endX;
+           startY = endY;
+    }
+    
    }
    
+  }
   
+    
 }
 
-int diameterx =  int(random(15,25));
-
-void drawSpringPath(PImage image){
-  // defines the number of images drawn, when the limit is reached the oldest ones are "deleted"
-  int maxPoints = 100; // change accordingly
+int diameterx = 25;// int(random(15,25));
+void drawSpringPath(PImage img){//PImage[] flowers){
+  
   
   for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
   {
-    Player p = playersEntry.getValue();
-    delta = millis()- lastTime;
-    // render path of each track
     
-    if (p.getNumPathPoints() > 1)
-      {
-        stroke(70, 100, 150, 25.0f);        
-        int numPoints = p.getNumPathPoints();
-        
-        // show the motion path of each track on the floor    
+    Player p = playersEntry.getValue();
+    float transparency = 255;
+    int numPoints = p.getNumPathPoints();
+    int rnd;
+    // render path of each track
+  if (p.getNumPathPoints() > 1){
+       
         float startX = p.getPathPointX(numPoints - 1);
         float startY = p.getPathPointY(numPoints - 1);
-         
-        //file.stop();
         
-       
         for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--) 
         {
-            float endX = p.getPathPointX(pointID);
-            float endY = p.getPathPointY(pointID);
-          if(dist(startX,startY,endX,endY)>stepDistance){
-            int index = int(random(0,flowers.length));
-            if(delta == timeInMs){
-             // file.loop(); // Loops over audio file
-              break;
-            }
            
-              
-              //scale(random(0.2,0.8));
-            
-              image(image,startX,startY, diameterx, diameterx);      
-            
-            
-                     
-          }
-            startX = endX;
-            startY = endY;
+           float endX = p.getPathPointX(pointID);
+           float endY = p.getPathPointY(pointID);
+          rnd = int(random(0, flowers.length));
+          if (transparency > 0 && isFading) { transparency -=visibility; }
+         int index = 0;
+          if(pointID%stepDistance==0){
+             if(isFading){
+               tint(255, transparency);
+              }    
+             image(img,startX,startY, diameterx, diameterx); 
+          } 
+        
+           startX = endX;
+           startY = endY;
+         
+          
         }
-      }
-      lastTime = millis();
-   }
-   
+    }
+     
+  }
   
 }
-
-
 
 
 
 void drawRainPath(PImage image){
-
-  // defines the number of images drawn, when the limit is reached the oldest ones are "deleted"
-  int maxPoints = 100; // change accordingly
-  //imageMode(CENTER);
   
   for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
   {
     Player p = playersEntry.getValue();
-    delta = millis()- lastTime;
-    // render path of each track
-    
-    if (p.getNumPathPoints() > 1)
-      {
-        stroke(70, 100, 150, 25.0f);        
-        int numPoints = p.getNumPathPoints();
-        
-        // show the motion path of each track on the floor    
-        float startX = p.getPathPointX(numPoints - 1);
-        float startY = p.getPathPointY(numPoints - 1);
-         
-        file.stop();
-       
-        for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--) 
-        {
-            float endX = p.getPathPointX(pointID);
-            float endY = p.getPathPointY(pointID);
-          if(dist(startX,startY,endX,endY)>stepDistance){
-        
-           
-            if(delta == timeInMs){
-              file.loop(); // Loops over audio file
-              break;
-            }
-           
-            float a = atan2(endY-startY,endX-startX); //+ radians(90);
-            image(image, startX, startY);
-           // translate(endX,endY); // TRANSLATION ISSUE
-             //rotate(a);
-            //image(image, startX, startY);
-            //image(image, startX, startY);
-            //file.stop();
-            //print("a:" + a + " ");
-            
-            // play snow crunch sound here
-             //line(startX, startY, endX, endY);
-          }
-          startX = endX;
-          startY = endY;
-          
-          
-          //fill(0);
-         // file.play();
-        
-          
-        }
-      }
-      lastTime = millis();
-   }
+    image(image, p.x+pxOffset, p.y+pyOffset);
+ 
+    }
   
 }
 
 // winter path
 
 void drawWinterPath(PImage image){
-  // defines the number of images drawn, when the limit is reached the oldest ones are "deleted"
-  int maxPoints = 100; // change accordingly
-  //imageMode(CENTER);
-  
-  for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
+ 
+ for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
   {
     Player p = playersEntry.getValue();
-    delta = millis()- lastTime;
-    // render path of each track
-    
-    if (p.getNumPathPoints() > 1)
-      {
-        stroke(70, 100, 150, 25.0f);        
-        int numPoints = p.getNumPathPoints();
-        
-        // show the motion path of each track on the floor    
-        float startX = p.getPathPointX(numPoints - 1);
-        float startY = p.getPathPointY(numPoints - 1);
-         
-        winter.stop();
+    float transparency = 255;
+    int numPoints = p.getNumPathPoints();
+    if(numPoints >1){
+      float startX = p.getPathPointX(numPoints - 1);
+      float startY = p.getPathPointY(numPoints - 1);
        
-        for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--) 
-        {
+       for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--){
             float endX = p.getPathPointX(pointID);
             float endY = p.getPathPointY(pointID);
-          if(dist(startX,startY,endX,endY)>stepDistance){
-        
-           
-            if(delta == timeInMs){
-              //winter.loop(); // Loops over audio file
-            // print("delta: " + delta);
-              break;
-            }
-           
-            float a = atan2(endY-startY,endX-startX); //+ radians(90);
-            //scale(0.02);
-           // image(image, startX, startY);
-            //translate(endX,endY); // TRANSLATION ISSUE
-            //rotate(a);
-            //scale(0.02);
-            image(image, startX, startY);
-            //image(image, startX, startY);
-            //image(image, startX, startY);
-            //file.stop();
-            //print("a:" + a + " ");
+            if (transparency > 0 && isFading) { transparency -=visibility; }
+            if(pointID%stepDistance==0){
             
-            // play snow crunch sound here
-             //line(startX, startY, endX, endY);
-          }
-          startX = endX;
-          startY = endY;
-          
-          
-          //fill(0);
-         // file.play();
-        
-          
-        }
+               if(isFading){
+                   tint(255, transparency);
+                }
+               image(image,startX,startY);
+  
+            } 
+             startX = endX;
+             startY = endY;
       }
-      lastTime = millis();
-   }
+      
+     }
    
+  }
   
 }

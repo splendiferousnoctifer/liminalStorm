@@ -1,18 +1,14 @@
-PImage image;
-String imgPath = "images/FootLeaves.png"; // one footprint
-
-PImage img2;
-String path2 = "images/FeetLeaves_small.png"; // 2 footprints
-PImage img3;
-String path3 = "images/Umbrella.png"; // 2 footprints
+// rain path graphic
+PImage umbrella;
+String rainPath = "images/rain/Umbrella.png";
 
 
 // Grass flower graphics
-String f1 = "images/flowers/flower1.png";
-String f2 = "images/flowers/flower2.png";
-String f3 = "images/flowers/flower3.png";
-String f4 = "images/flowers/flower4.png";
-String f5 = "images/flowers/flower5.png";
+String f1 = "images/flowers/flower0.png";
+String f2 = "images/flowers/flower1.png";
+String f3 = "images/flowers/flower2.png";
+String f4 = "images/flowers/flower3.png";
+String f5 = "images/flowers/flower4.png";
 
 PImage fl1;
 PImage fl2;
@@ -23,21 +19,38 @@ PImage fl5;
 PImage[] flowers = {fl1,fl2,fl3,fl4,fl5};
 
 
-//winter path
+//winter path graphics
+String w0 = "images/snow/Snowball.png";
+String w1 = "images/snow/Snowflake0.png";
+String w2 = "images/snow/Snowflake1.png";
+String w3 = "images/snow/Snowflake2.png";
+String w4 = "images/snow/Snowflake3.png";
 
-PImage w1;
-String winterImg = "images/FeetSnow.png";
+PImage wi0;
+PImage wi1;
+PImage wi2;
+PImage wi3;
+PImage wi4;
 
+PImage[] snows= {wi0, wi1, wi2, wi3, wi4};
+
+// leaf path graphics
+String m0 = "images/mud/Mud0.png";
+String m1 = "images/mud/Mud1.png";
+String m2 = "images/mud/Mud2.png";
+
+PImage mu0;
+PImage mu1;
+PImage mu2;
+
+PImage[] muds = {mu0, mu1, mu2};
 
 SoundFile winter;
 String wPath = "sound/snowCrunch_single.mp3";
 
-int screen_cursor = 25;
+int screen_cursor = 30;
 
 SoundFile file;
-SoundFile sound;
-SoundFile sound2;
-
 String soundPath = "sound/leaves_crunching.mp3";//"sound/rain_drops_little_thunder.mp3";
 
 String s1 = "sound/snowCrunch_single.mp3";
