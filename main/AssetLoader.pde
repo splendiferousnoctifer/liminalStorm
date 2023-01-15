@@ -16,8 +16,6 @@ PImage fl3;
 PImage fl4;
 PImage fl5;
 
-PImage[] flowers = {fl1,fl2,fl3,fl4,fl5};
-
 
 //winter path graphics
 String w0 = "images/snow/Snowball.png";
@@ -32,7 +30,6 @@ PImage wi2;
 PImage wi3;
 PImage wi4;
 
-PImage[] snows= {wi0, wi1, wi2, wi3, wi4};
 
 // leaf path graphics
 String m0 = "images/mud/Mud0.png";
@@ -43,14 +40,16 @@ PImage mu0;
 PImage mu1;
 PImage mu2;
 
-PImage[] muds = {mu0, mu1, mu2};
+SoundFile grass;
+SoundFile rain;
+SoundFile leaf;
 
 SoundFile winter;
 String wPath = "sound/snowCrunch_single.mp3";
 
 int screen_cursor = 30;
 
-SoundFile file;
+SoundFile file; // leaves
 String soundPath = "sound/leaves_crunching.mp3";//"sound/rain_drops_little_thunder.mp3";
 
 String s1 = "sound/snowCrunch_single.mp3";
@@ -67,3 +66,6 @@ color[][] gradients = {
      {color(100), color(40)},//storm
      {color(10), color(0)}
 };
+String s6 = "sound/grass_step.wav";
+String s7 = "sound/puddle_step.mp3";
+String s8 = "sound/leaf_step.wav";

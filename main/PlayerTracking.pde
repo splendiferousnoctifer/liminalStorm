@@ -9,11 +9,13 @@ import java.awt.Point;
 
 PharusClient pc;
 float stepDistance = 30; // distance between player steps
-int maxPoints = 300;
+int maxPoints = 100;
 int pxOffset = -10;
 int pyOffset = -5;
 float visibility = 1.5;
 boolean isFading = true;
+boolean audioON = false;
+
 
 void initPlayerTracking()
 {
@@ -102,7 +104,7 @@ void pharusPlayerRemoved(Player player)
 
 
 PImage img;
-void drawPath(PImage image){
+void drawPath(PImage[] image){
   // defines the number of images drawn, when the limit is reached the oldest ones are "deleted"
 
   for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
@@ -110,11 +112,14 @@ void drawPath(PImage image){
     Player p = playersEntry.getValue();
     float transparency = 255;
     int numPoints = p.getNumPathPoints();
-    
+    int rnd = 0;
     if(numPoints >1){
       float startX = p.getPathPointX(numPoints - 1);
       float startY = p.getPathPointY(numPoints - 1);
-     
+      if(numPoints%10==0 && audioON){ 
+           leaf.play(); // plays audio file 
+          // break;
+         }
      for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--) 
         {
           float endX = p.getPathPointX(pointID);
@@ -122,15 +127,19 @@ void drawPath(PImage image){
           if (transparency > 0 && isFading) { transparency -=visibility; }
           
           if(pointID%stepDistance==0){
-            
+              if(pointID%stepDistance==0){
+               rnd = int(random(0, image.length));
+               
+            }
             if(isFading){
              tint(255, transparency);
             }
-             image(image,startX,startY);
+             image(image[rnd],startX,startY);
 
           } 
            startX = endX;
            startY = endY;
+           leaf.stop();
     }
     
    }
@@ -141,42 +150,56 @@ void drawPath(PImage image){
 }
 
 int diameterx = 25;// int(random(15,25));
-void drawSpringPath(PImage img){//PImage[] flowers){
+void drawSpringPath(PImage[] flowers){
   
-  
+  int rnd = 4;
   for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
   {
     
     Player p = playersEntry.getValue();
     float transparency = 255;
     int numPoints = p.getNumPathPoints();
-    int rnd;
+     
     // render path of each track
   if (p.getNumPathPoints() > 1){
        
         float startX = p.getPathPointX(numPoints - 1);
         float startY = p.getPathPointY(numPoints - 1);
+        if(numPoints%10==0 && audioON){ 
+         grass.play(); // plays audio file 
+        // break;
+       }
         
         for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--) 
         {
            
+          
            float endX = p.getPathPointX(pointID);
            float endY = p.getPathPointY(pointID);
-          rnd = int(random(0, flowers.length));
+       
           if (transparency > 0 && isFading) { transparency -=visibility; }
-         int index = 0;
+         
           if(pointID%stepDistance==0){
+            
+            if(pointID%stepDistance==0){
+              rnd = int(random(0, flowers.length));
+               
+            }
+           
              if(isFading){
                tint(255, transparency);
               }    
-             image(img,startX,startY, diameterx, diameterx); 
+             image(flowers[rnd],startX,startY, diameterx, diameterx); 
+             
+             //print("rnd: " + rnd);
           } 
         
            startX = endX;
            startY = endY;
-         
-          
+           grass.stop();
+
         }
+          
     }
      
   }
@@ -190,40 +213,58 @@ void drawRainPath(PImage image){
   for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
   {
     Player p = playersEntry.getValue();
+    int numPoints = p.getNumPathPoints();
+    if(numPoints%10==0 && audioON){ 
+         rain.play(); // plays audio file 
+        // break;
+       }
     image(image, p.x+pxOffset, p.y+pyOffset);
- 
+    rain.stop();
     }
   
 }
 
 // winter path
 
-void drawWinterPath(PImage image){
+void drawWinterPath(PImage[] snows){
  
+ int rnd = 0;
  for (HashMap.Entry<Long, Player> playersEntry : pc.players.entrySet()) 
   {
     Player p = playersEntry.getValue();
     float transparency = 255;
     int numPoints = p.getNumPathPoints();
+    
+    
     if(numPoints >1){
       float startX = p.getPathPointX(numPoints - 1);
       float startY = p.getPathPointY(numPoints - 1);
-       
+       if(numPoints%stepDistance==0 && audioON){ 
+         winter.play(); // plays audio file 
+         //break;
+       }
        for (int pointID = numPoints - 2; pointID > max(0, numPoints - maxPoints); pointID--){
             float endX = p.getPathPointX(pointID);
             float endY = p.getPathPointY(pointID);
             if (transparency > 0 && isFading) { transparency -=visibility; }
             if(pointID%stepDistance==0){
-            
+              if(pointID%stepDistance==0){
+               rnd = int(random(1, snows.length));
+               
+            }
                if(isFading){
                    tint(255, transparency);
                 }
-               image(image,startX,startY);
-  
+               image(snows[rnd],startX,startY);
+               
+             // break;
             } 
              startX = endX;
              startY = endY;
+             winter.stop();
+
       }
+     
       
      }
    
