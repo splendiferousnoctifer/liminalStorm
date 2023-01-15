@@ -49,6 +49,9 @@ class Leaves extends BaseState {
     clear();
     background(209, 133, 46);
     
+    int nextID = super.stateMgr.getCurrentStateID() >= splitOrder.length ? gradients.length-1 : splitOrder[super.stateMgr.nextStateID(super.stateMgr.getCurrentStateID()) -1]-1;  
+
+    
     setGradient(0, 0, width, wallHeight, color(223, 193, 158), color(209, 133, 46));
     text((int)frameRate + " FPS", width / 2, 10);
   
@@ -58,7 +61,7 @@ class Leaves extends BaseState {
       noFill();
       stroke(255);
       strokeWeight(1);
-      rotate(rot[i]);
+      //rotate(rot[i]);
       quad(xPosLeaves[i], yPosLeaves[i], xPosLeaves[i]+d[i], yPosLeaves[i]+(d[i]*2), xPosLeaves[i], yPosLeaves[i]+(d[i]*3), xPosLeaves[i]-d[i], yPosLeaves[i]+(d[i]*2));
      
       //Creates movement on the x-axis
@@ -83,15 +86,17 @@ class Leaves extends BaseState {
     for(int i = 0; i < xPosFol.length; i++) {
       stroke(255);
       noFill();
-      rotate(rotFol[i]);
-      //Scale leaf
-      int m = millis();
-      if (m < 1500){
-        if(dFol[i]>5){
-           dFol[i] -= .2;
+      pushMatrix();
+        rotate(rotFol[i]);
+        //Scale leaf
+        int m = millis();
+        if (m < 1500){
+          if(dFol[i]>5){
+             dFol[i] -= .2;
+          }
         }
-      }
-      quad(xPosFol[i], yPosFol[i], xPosFol[i]+dFol[i], yPosFol[i]+(dFol[i]*2), xPosFol[i], yPosFol[i]+(dFol[i]*3), xPosFol[i]-dFol[i], yPosFol[i]+(dFol[i]*2));
+        quad(xPosFol[i], yPosFol[i], xPosFol[i]+dFol[i], yPosFol[i]+(dFol[i]*2), xPosFol[i], yPosFol[i]+(dFol[i]*3), xPosFol[i]-dFol[i], yPosFol[i]+(dFol[i]*2));
+       popMatrix();
     }   
     
     

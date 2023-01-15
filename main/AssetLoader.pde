@@ -58,3 +58,12 @@ String s2 = "sound/grass_walking.wav";
 String s3 = "sound/leaves_crunching.mp3";
 String s4 = "sound/rain_drops_little_thunder.mp3";
 String s5= "sound/rain_thunder.mp3";
+
+
+color[][] gradients = {
+     {color(122, 172, 172), color(0, 65, 75)},//rain
+     {color(223, 193, 158), color(209, 133, 46)},//leaf
+     {color(223, 239, 246), color(118, 144, 172)},//snow
+     {color(100), color(40)},//storm
+     {color(10), color(0)}
+};

@@ -13,6 +13,10 @@ int maxFlakes =30000;
 int minFlakes=15000;
 int[][] snowFloor;
 
+float inc = 0;
+int alphaSnow = 255;
+
+
 class Snow extends BaseState {
   
   Snow() {
@@ -35,14 +39,52 @@ class Snow extends BaseState {
   
   void draw() {    
     clear();
-    background(118, 144, 172);
+    int nextID = super.stateMgr.getCurrentStateID() >= splitOrder.length ? gradients.length-1 : splitOrder[super.stateMgr.nextStateID(super.stateMgr.getCurrentStateID()) -1]-1;  
     
-    setGradient(0, 0, width, wallHeight, color(223, 239, 246), color(118, 144, 172));
+    background(118, 144, 172);
+    fill(gradients[nextID][1],255 - alphaSnow);
+    rect(0,height/2,width,height);
+
+    setGradient(0, 0, width, height/2, color(223, 239, 246), color(118, 144, 172));
+    setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alphaSnow), color(gradients[nextID][1], 255-alphaSnow));
+    
    
     text((int)frameRate + " FPS", width / 2, 10);
-  
+    
+    int start = super.stateMgr.stateStamp;
+    int timeNow = millis();//super.stateMgr.getTimeInState();
+    int end = start + duration;
+    int drawAmount, drawAmountSnow;
+    
+    if(timeNow < duration/3+start){
+      drawAmount = (int) map(timeNow, start, end - (duration/3)*2, 0, amountFlakes); 
+      drawAmountSnow = (int) map(timeNow, start, end - (duration/3)*2, 0, xPos.length); 
+    } else if(timeNow > (duration/3)*2 +start) {
+      drawAmount = amountFlakes;
+      drawAmountSnow = (int) map(timeNow, start + (duration/3)*2, end, xPos.length/2, 0);
+      
+      alphaSnow = (int) map(timeNow, start + (duration/4)*3, end,255, 0);
+    }else {
+      drawAmount = amountFlakes;
+      drawAmountSnow = xPos.length;
+      inc += 0.1;
+    }
+    
+    
+
+    
+    
+    if(drawAmount > amountFlakes) drawAmount = amountFlakes-1;
+    
+    for (int i = 0; i<drawAmount;i++){
+        noStroke();
+        fill(255, alphaSnow);
+        ellipse(snowFloor[i][0], snowFloor[i][1],5+inc,5+inc);
+    }
+    
+    
     //FALLING SNOW
-    for(int i = 0; i < xPos.length; i++) {
+    for(int i = 0; i < drawAmountSnow; i++) {
   
       fill(255,255,255);
       noStroke();
@@ -64,29 +106,6 @@ class Snow extends BaseState {
         xPos[i] = random(0, width);
         yPos[i] = -fSize[i];
       }  
-    } 
-    
-    int start = super.stateMgr.stateStamp;
-    int timeNow = millis();//super.stateMgr.getTimeInState();
-    int end = start + duration;
-    int drawAmount;
-    
-    //Draw floor Snow with increasing time by mapping it to the duration
-    if(timeNow < duration/2+start + 100){
-      drawAmount = (int) map(timeNow, start, end - duration/2, 0, amountFlakes); 
-    } else {
-      drawAmount = amountFlakes;
-      int alpha = (int)map(timeNow,start + int(duration/2), end, 0,255);
-      fill(255,alpha);
-      rect(0, wallHeight, width, windowHeight);
-    } 
-    
-    if(drawAmount > amountFlakes) drawAmount = amountFlakes-1;
-    
-    for (int i = 0; i<drawAmount;i++){
-        noStroke();
-        fill(255);
-        ellipse(snowFloor[i][0], snowFloor[i][1],5,5);
     }
     
     //if(osCompatible) drawWinterPath(w1);

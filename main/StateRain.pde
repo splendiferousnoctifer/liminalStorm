@@ -12,6 +12,9 @@ int maxPuddles =300;
 int minPuddles=10;
 Puddle[] puddles=new Puddle[maxPuddles];
 
+int alphaRain = 255;
+
+
 class Rain extends BaseState{
   
   Rain() {
@@ -37,33 +40,40 @@ class Rain extends BaseState{
   
   void draw() {
     clear();
+    amountDrops=750;
+    
+    int nextID = super.stateMgr.getCurrentStateID() >= splitOrder.length ? gradients.length-1 : splitOrder[super.stateMgr.nextStateID(super.stateMgr.getCurrentStateID()) -1]-1;  
+
     background(0, 65, 75);
-    setGradient(0, 0, width, wallHeight, color(122, 172, 172), color(0, 65, 75));
+    fill(gradients[nextID][1],255 - alphaRain);
+    rect(0,height/2,width,height);
+    
+    setGradient(0, 0, width, height/2, color(122, 172, 172,alphaRain), color(0, 65, 75,alphaRain));
+    setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alphaRain), color(gradients[nextID][1], 255-alphaRain));
+
   
     text((int)frameRate + " FPS", width / 2, 10);
 
   
-  
-    //Draw floor Snow with increasing time by mapping it to the duration
-    int timeNow = super.stateMgr.getTimeInState();
+    //Draw floor Rain with increasing time by mapping it to the duration
     int start = super.stateMgr.stateStamp;
+    int timeNow = millis();//super.stateMgr.getTimeInState();
     int end = start + duration;
-    int drawAmountDrops, drawAmountPuddles;
-    
-    text(float(timeNow)/1000/60 + " seconds", width / 2, 20);
-    
-    if(timeNow < duration/amountIntervals){
-      drawAmountDrops = (int) map(timeNow, start, end, 0, amountDrops);  
-      drawAmountPuddles = (int) map(timeNow, start, end, 0, amountPuddles);      
-    } else if (timeNow > (duration/amountIntervals) * amountIntervals-2){
-      drawAmountDrops = (int) map(timeNow, start, end, amountDrops/2, 0);  
-      drawAmountPuddles = (int) map(timeNow, start, end, amountPuddles/2, 0);  
+    int drawAmountDrops,drawAmountPuddles;
+        
+    if(timeNow < duration/3+start){
+      drawAmountDrops = (int) map(timeNow, start, end - (duration/3)*2, 0, amountDrops);  
+      drawAmountPuddles = (int) map(timeNow, start, end - (duration/3)*2, 0, amountPuddles);      
+    } else if (timeNow > (duration/3)*2 +start){
+      drawAmountDrops = (int) map(timeNow, start + (duration/3)*2, end, amountDrops/2, 0);  
+      drawAmountPuddles = (int) map(timeNow, start + (duration/3)*2, end, amountPuddles/2, 0);
+      
+      alphaRain = (int) map(timeNow, start + (duration/3)*2, end,255, 0);
     } else {
       drawAmountDrops = amountDrops;  
       drawAmountPuddles = amountPuddles;
     }
-    
-      
+          
     for (int i = 0; i<drawAmountDrops;i++){
       drops[i].fall();
     }
@@ -71,6 +81,8 @@ class Rain extends BaseState{
     for (int i=0;i<drawAmountPuddles;i++){
       puddles[i].grow();
     }
+    
+
     
     //if(osCompatible) drawRainPath(img3);
   }
@@ -114,12 +126,13 @@ class Drop{
       line(x,oldY,x,y);
       oldY=y;
     }
+    
     else{ //Floor extension
       noFill();
       stroke(175,175,175,255-map(onde,0,d,0,255));
       strokeWeight(map(onde,0,d,0,4));
       d=d1+(y-wallHeight)*4;
-      ellipse(x,y,onde/10,onde/40);
+      //ellipse(x,y,onde/10,onde/40);
       onde=onde+7;
       if(onde>d){
         onde=0;

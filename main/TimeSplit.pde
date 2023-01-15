@@ -10,10 +10,10 @@ public class TimeSplit {
     public int[] splitInterval() {
         Random rng = new Random();
  
-        int numSplits = rng.nextInt(3) + 3;
+        int numSplits = rng.nextInt(3) + 3; //3-5
         int[] splitDurations = new int[numSplits];
         //int duration = rng.nextInt(6) * 60000 + (5 * 60000);
-        int duration = rng.nextInt(1 * 60000) + (1 * 60000);
+        int duration = rng.nextInt(3 * 60000) + (2 * 60000);
         
         println("Seconds: ", duration/1000);
 

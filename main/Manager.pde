@@ -68,8 +68,6 @@ class StateMgr {
     if (currentID < states.length) {
       return currentStateID + 1;
     }
-          print("hi");
-
     return states.length;
   }
 

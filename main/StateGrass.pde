@@ -1,18 +1,21 @@
 import processing.core.PVector;
 
-float yIncrement = 0.02;
-float zIncrement = 0.00025;
-float scl = 20;
+float yIncrement = 0.05;
+int scl = 20;
 float zoff = 0;
 
 int cols = floor(windowWidth / scl) + 1;
 int rowsWall = round(wallHeight/3 / scl) + 1;
 int rowsFloor = round(wallHeight/scl) + 1;
+int[][] displace = new int[rowsFloor][cols];
+
 
 // array with file paths
 String[] audioFiles = {s1, s2, s3, s4, s5};
 
 int interval;
+int alpha = 255;
+
 
 class Grass extends BaseState {
   
@@ -23,16 +26,29 @@ class Grass extends BaseState {
   Grass(StateMgr _stateMgr, int _duration) {
     super(_stateMgr, _duration); 
     interval = duration / audioFiles.length;
+    
+    for (int i = 0; i < rowsFloor; i++) {
+        for (int j = 0; j < cols; j++) {
+            displace[i][j] = (int) random(scl);
+        }
+    }
   }
   
   void draw() {
     clear();
-    background(73, 106, 45);
+    int nextID = super.stateMgr.getCurrentStateID() >= splitOrder.length ? gradients.length-1 : splitOrder[super.stateMgr.nextStateID(super.stateMgr.getCurrentStateID()) -1]-1;  
 
-    setGradient(0, 0, width, height/2, color(177, 213, 174), color(73, 106, 45));
+    background(73, 106, 45);
+    fill(gradients[nextID][1],255 - alpha);
+    rect(0,height/2,width,height);
+
+
+    setGradient(0, 0, width, height/2, color(177, 213, 174, alpha), color(73, 106, 45,alpha));
+    setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alpha), color(gradients[nextID][1], 255-alpha));
+
     
     grassFloor();
-    grassWall();
+    //grassWall();
     
     text((int)frameRate + " FPS", width / 2, 100);
 
@@ -44,10 +60,26 @@ class Grass extends BaseState {
   
   
   void grassFloor(){
+    
+    int start = super.stateMgr.stateStamp;
+    int timeNow = millis();//super.stateMgr.getTimeInState();
+    int end = start + duration;
+    int lenGrass;
+    
+    //Draw floor Snow with increasing time by mapping it to the duration
+    if(timeNow < duration/3+start){
+      lenGrass = (int) map(timeNow, start, end - (duration/3)*2, -5, scl+15); 
+    } else if (timeNow > (duration/3)*2 +start){
+      lenGrass = (int) map(timeNow, start + (duration/3)*2, end,scl+15, -0);
+      alpha = (int) map(timeNow, start + (duration/3)*2, end,255, 0);
+    } else {
+      lenGrass = (int) scl+10;
+    }
+    
     float yoff = 0;
-    for (int y = 0; y < rowsFloor; y++){
+    for (int i = 0; i < rowsFloor; i++){
       float xoff = 0;
-      for (int x = 0; x < cols; x++){
+      for (int j = 0; j < cols; j++){
         float angle = noise(xoff, yoff, zoff) * TWO_PI;
         xoff += yIncrement;
         PVector vector = PVector.fromAngle(angle);
@@ -56,9 +88,9 @@ class Grass extends BaseState {
         fill(255);
         noStroke();
         push();
-          translate(x * scl, y * scl + wallHeight);
+          translate(j * scl + displace[i][j], i * scl + wallHeight + displace[i][j]);
           rotate(vector.heading());
-          quad(0,0,0,1,scl+10,scl+10,1,0);
+          quad(0,0,0,1,lenGrass,lenGrass,1,0);
         pop();
       }
       yoff += yIncrement;
@@ -75,6 +107,7 @@ class Grass extends BaseState {
         xoff += yIncrement;
         PVector vector = PVector.fromAngle(angle);
         vector.setMag(1);
+        
   
         fill(255);
         noStroke();
@@ -85,7 +118,7 @@ class Grass extends BaseState {
         pop();
       }
       yoff += yIncrement;
-      zoff += 0.00025;
+      zoff += 0.25;
     }
   }
   

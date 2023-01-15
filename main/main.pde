@@ -4,6 +4,7 @@ boolean debug = true;
 boolean osCompatible;
 String operatingSystem = System.getProperty("os.name");
 
+SoundFile ambient;
 
 float cursor_size = 25;
 PFont font;
@@ -49,18 +50,7 @@ void settings()
 
 void setup() {
   loadImages();
-  /*
-  switch (operatingSystem) {
-    case "Windows":
-      osCompatible = true;     
-      break;
-    case "Mac":
-      osCompatible = false;
-      break;
-    default:
-      osCompatible = false;
-      break;
-  }*/
+
   
   // update with actual fullscreen resolutions
   if (bFullscreen)
@@ -86,8 +76,8 @@ void setup() {
   noStroke();
   
   if (debug){
-    splitDurations = new int[] {30000,30000,30000,30000};
-    splitOrder = new int[] {1,3,2};
+    splitDurations = new int[] {300,300,30000,300, 300};
+    splitOrder = new int[] {1,2,3,4};
   } else {
     splitDurations = timeSplit.splitInterval();
     splitOrder = timeSplit.assignNumbers(splitDurations);
@@ -101,6 +91,9 @@ void setup() {
   END = stateMgr.addState(new End(stateMgr, 10000));
   
   stateMgr.setState(GRASS);  
+  
+  //ambient = new SoundFile(this, "sound/ambient.mp3");
+  //ambient.loop();
   
   println("Time Intervals: ", Arrays.toString(splitDurations));
   println("Order of Intervals: ", Arrays.toString(splitOrder));
@@ -120,15 +113,15 @@ void draw() {
     stateMgr.setState(stateMgr.nextStateID(currentID));
   } 
   
-  int currentState = (currentID != 0 || currentID > 4) ? 0 : splitOrder[currentID+1];
+  int currentState = (currentID == 0 || currentID >= 4) ? 0 : splitOrder[currentID-1];
     
  //if(osCompatible) {
     switch (currentState) {
         case 0: //grass
-         drawSpringPath(fl1);
+          drawSpringPath(fl1);
           break;
         case 1: //rain
-           drawRainPath(umbrella);
+          drawRainPath(umbrella);
           break;
         case 2: //leaves
           drawPath(mu0);
