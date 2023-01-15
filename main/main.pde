@@ -35,6 +35,9 @@ int[] splitDurations, splitOrder;
 StateMgr stateMgr;
 TimeSplit timeSplit;
 
+PImage[] flowers = new PImage[5];
+PImage[] muds = new PImage[3];
+PImage[] snows= new PImage[5];;
 void settings()
 {
   if (bFullscreen)
@@ -48,6 +51,7 @@ void settings()
 }
 
 void setup() {
+
   loadImages();
   /*
   switch (operatingSystem) {
@@ -121,20 +125,21 @@ void draw() {
   } 
   
   int currentState = (currentID != 0 || currentID > 4) ? 0 : splitOrder[currentID+1];
+  println(currentState);
     
  //if(osCompatible) {
     switch (currentState) {
         case 0: //grass
-         drawSpringPath(fl1);
+         drawSpringPath(flowers);//fl1);
           break;
         case 1: //rain
            drawRainPath(umbrella);
           break;
         case 2: //leaves
-          drawPath(mu0);
+          drawPath(muds);
           break;
         case 3: //snow
-         drawWinterPath(wi3); 
+          drawWinterPath(snows); 
           break;
         case 4: //storm
           break;
@@ -190,8 +195,22 @@ void loadImages(){
   ShowFeet = true; // always shows feet of players in tracking
   //imageMode(CENTER);
   
+  // leaves path
   mu0 = loadImage(m0);
+  mu1 = loadImage(m1);
+  mu2 = loadImage(m2);
+  
   mu0.resize(0, screen_cursor);
+  mu1.resize(0, screen_cursor);
+  mu2.resize(0, screen_cursor);
+  
+  muds[0] = mu0;
+  muds[1] = mu1;
+  muds[2] = mu2;
+ 
+
+  file = new SoundFile(this, soundPath);
+  
   
   // rain path
   umbrella = loadImage(rainPath);
@@ -199,10 +218,44 @@ void loadImages(){
   
   // grass path (flowers)
   fl1 = loadImage(f1);
-  file = new SoundFile(this, soundPath);
-  
+  fl2 = loadImage(f2);
+  fl3 = loadImage(f3);
+  fl4 = loadImage(f4);
+  fl5 = loadImage(f5);
+ 
+ fl1.resize(0,screen_cursor);
+ fl2.resize(0,screen_cursor);
+ fl3.resize(0,screen_cursor);
+ fl4.resize(0,screen_cursor);
+ fl5.resize(0,screen_cursor);
+ 
+ flowers[0] = fl1;
+ flowers[1] = fl2;
+ flowers[2] = fl3;
+ flowers[3] = fl4;
+ flowers[4] = fl5;
+ 
   // winter path
+  wi0 = loadImage(w0);
+  wi1 = loadImage(w1);
+  wi2 = loadImage(w2);
   wi3 = loadImage(w3);
+  wi4 = loadImage(w4);
+  
+  wi0.resize(0,screen_cursor);
+  wi1.resize(0,screen_cursor);
+  wi2.resize(0,screen_cursor);
   wi3.resize(0,screen_cursor);
+  wi4.resize(0,screen_cursor);
+  
+ snows[0] = wi0;
+ snows[1] = wi1;
+ snows[2] = wi2;
+ snows[3] = wi3;
+ snows[4] = wi4;
+ 
+  grass = new SoundFile(this, s6);
+  rain = new SoundFile(this, s7);
+  leaf = new SoundFile(this, s8);
   winter = new SoundFile(this, wPath);
 }

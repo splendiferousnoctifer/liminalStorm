@@ -33,7 +33,7 @@ class Grass extends BaseState {
     
     grassFloor();
     grassWall();
-    
+    drawPath(muds);
     text((int)frameRate + " FPS", width / 2, 100);
 
 
