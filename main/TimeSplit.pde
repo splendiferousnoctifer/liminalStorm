@@ -12,7 +12,7 @@ public class TimeSplit {
  
         int numSplits = rng.nextInt(3) + 3; //3-5
         int[] splitDurations = new int[numSplits];
-        int duration = rng.nextInt(3 * 60000) + (2 * 60000); // 2-4
+        int duration = rng.nextInt(3 * 60000) + (4 * 60000); // 4-6
         
         println("Seconds: ", duration/1000);
 
