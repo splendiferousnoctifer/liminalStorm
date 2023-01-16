@@ -35,10 +35,12 @@ PImage wi4;
 String m0 = "images/mud/Mud0.png";
 String m1 = "images/mud/Mud1.png";
 String m2 = "images/mud/Mud2.png";
+String quadIm = "images/quad3.png";
 
 PImage mu0;
 PImage mu1;
 PImage mu2;
+PImage quad;
 
 SoundFile grass;
 SoundFile rain;

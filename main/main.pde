@@ -1,6 +1,6 @@
 import processing.sound.*;
 
-boolean debug = true;
+boolean debug = false;
 boolean osCompatible;
 String operatingSystem = System.getProperty("os.name");
 
@@ -80,7 +80,7 @@ void setup() {
   noStroke();
   
   if (debug){
-    splitDurations = new int[] {300,300,30000,300, 300};
+    splitDurations = new int[] {300,300,300,300, 300};
     splitOrder = new int[] {1,2,3,4};
   } else {
     splitDurations = timeSplit.splitInterval();
@@ -96,8 +96,8 @@ void setup() {
   
   stateMgr.setState(GRASS);  
   
-  //ambient = new SoundFile(this, "sound/ambient.mp3");
-  //ambient.loop();
+  ambient = new SoundFile(this, "sound/ambient.mp3");
+  ambient.loop();
   
   println("Time Intervals: ", Arrays.toString(splitDurations));
   println("Order of Intervals: ", Arrays.toString(splitOrder));
@@ -109,7 +109,7 @@ void draw() {
   stateMgr.getCurrentState().draw();
   stateMgr.updateStates();
   
-  int currentID = stateMgr.getCurrentStateID();
+  int currentID = stateMgr.getCurrentStateID(); //<>//
   
   if ( currentID == splitDurations.length) {
     stateMgr.setState(END);
@@ -191,6 +191,7 @@ void loadImages(){
   mu0 = loadImage(m0);
   mu1 = loadImage(m1);
   mu2 = loadImage(m2);
+  quad = loadImage(quadIm);
   
   mu0.resize(0, screen_cursor);
   mu1.resize(0, screen_cursor);

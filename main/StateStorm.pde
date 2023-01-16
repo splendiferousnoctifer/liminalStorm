@@ -62,7 +62,7 @@ class Storm extends BaseState {
   
   void draw() {
     clear();    
-    int nextID = splitOrder[super.stateMgr.nextStateID(super.stateMgr.getCurrentStateID()) -1]-1;  
+    int nextID = super.stateMgr.getCurrentStateID() >= splitOrder.length ? gradients.length-1 : splitOrder[super.stateMgr.nextStateID(super.stateMgr.getCurrentStateID()) -1]-1;  
     
     background(40, alphaStorm);
     fill(gradients[nextID][1],255 - alphaStorm);
@@ -118,6 +118,16 @@ class Storm extends BaseState {
       }
     }
   }  
+  
+  void setGradient(int x, int y, float w, float h, color c1, color c2) {  
+    for (int i = y; i <= y+h; i++) {
+      float inter = map(i, y, y+h, 0, 1);
+      color c = lerpColor(c1, c2, inter);
+      strokeWeight(2);
+      stroke(c);
+      line(x, i, x+w, i);
+    }
+  }
   
 }
 

@@ -12,14 +12,13 @@ public class TimeSplit {
  
         int numSplits = rng.nextInt(3) + 3; //3-5
         int[] splitDurations = new int[numSplits];
-        //int duration = rng.nextInt(6) * 60000 + (5 * 60000);
-        int duration = rng.nextInt(3 * 60000) + (2 * 60000);
+        int duration = rng.nextInt(3 * 60000) + (2 * 60000); // 2-4
         
         println("Seconds: ", duration/1000);
 
         int sum = 0;
   
-        for (int i = 0; i < numSplits; i++) {
+        for (int i = 0; i < numSplits; i++) {/*
             int num;
             if (i == numSplits - 1) {
                 // Generate the last number so that the sum adds up to k
@@ -27,8 +26,10 @@ public class TimeSplit {
             } else {
                 num = rng.nextInt(duration - sum) + 1; // Generate a random number between 1 and k - sum (inclusive)
                 sum += num;
-            }
-            splitDurations[i] = (int) num;
+            }*/
+            
+            
+            splitDurations[i] = int(duration/numSplits + random(numSplits)*100);
         }
 
         return splitDurations;

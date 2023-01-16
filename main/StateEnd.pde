@@ -9,8 +9,15 @@ class End extends BaseState {
   }
   
   void draw() {
-    fill(200, 162, 200);
-    rect(0, 0, width, height);
+    background(0, 0, 0);    
+    fill(255);
+
+    textSize(60);
+    text("Liminal Storm", width/2, wallHeight/2);
+    
+    textSize(18);
+    text("Rita Hainzl, Jessica Studwell, Samuel Zühlke", width/2, wallHeight/2 + 50);
+   
   }  
   
 }

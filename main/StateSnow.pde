@@ -49,7 +49,7 @@ class Snow extends BaseState {
     setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alphaSnow), color(gradients[nextID][1], 255-alphaSnow));
     
    
-    text((int)frameRate + " FPS", width / 2, 10);
+    //text((int)frameRate + " FPS", width / 2, 10);
     
     int start = super.stateMgr.stateStamp;
     int timeNow = millis();//super.stateMgr.getTimeInState();

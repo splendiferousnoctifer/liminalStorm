@@ -52,7 +52,7 @@ class Rain extends BaseState{
     setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alphaRain), color(gradients[nextID][1], 255-alphaRain));
 
   
-    text((int)frameRate + " FPS", width / 2, 10);
+    //text((int)frameRate + " FPS", width / 2, 10);
 
   
     //Draw floor Rain with increasing time by mapping it to the duration

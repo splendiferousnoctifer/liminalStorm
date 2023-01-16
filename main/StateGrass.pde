@@ -50,7 +50,7 @@ class Grass extends BaseState {
     grassFloor();
     //grassWall();
     
-    text((int)frameRate + " FPS", width / 2, 100);
+    //text((int)frameRate + " FPS", width / 2, 100);
 
 
     //if(osCompatible) drawSpringPath(fl1);
