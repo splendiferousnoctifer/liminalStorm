@@ -69,5 +69,5 @@ color[][] gradients = {
      {color(10), color(0)}
 };
 String s6 = "sound/grass_step.wav";
-String s7 = "sound/puddle_step.mp3";
+//String s7 = "sound/puddle_step.mp3";
 String s8 = "sound/leaf_step.wav";

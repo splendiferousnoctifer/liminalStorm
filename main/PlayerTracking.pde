@@ -215,11 +215,11 @@ void drawRainPath(PImage image){
     Player p = playersEntry.getValue();
     int numPoints = p.getNumPathPoints();
     if(numPoints%10==0 && audioON){ 
-         rain.play(); // plays audio file 
+        // rain.play(); // plays audio file 
         // break;
        }
     image(image, p.x+pxOffset, p.y+pyOffset);
-    rain.stop();
+    //rain.stop();
     }
   
 }

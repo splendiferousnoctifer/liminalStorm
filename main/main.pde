@@ -134,6 +134,7 @@ void draw() {
           drawWinterPath(snows); 
           break;
         case 4: //storm
+         drawRainPath(umbrella);
           break;
      }
   //}
@@ -248,7 +249,7 @@ void loadImages(){
  snows[4] = wi4;
  
   grass = new SoundFile(this, s6);
-  rain = new SoundFile(this, s7);
+ // rain = new SoundFile(this, s7);
   leaf = new SoundFile(this, s8);
   winter = new SoundFile(this, wPath);
 }
