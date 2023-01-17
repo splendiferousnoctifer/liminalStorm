@@ -1,6 +1,6 @@
 import processing.sound.*;
 
-boolean debug = false;
+boolean debug = true;
 boolean osCompatible;
 String operatingSystem = System.getProperty("os.name");
 
@@ -80,7 +80,7 @@ void setup() {
   noStroke();
   
   if (debug){
-    splitDurations = new int[] {300,300,300,300, 300};
+    splitDurations = new int[] {300,300,300,300, 30000};
     splitOrder = new int[] {1,2,3,4};
   } else {
     splitDurations = timeSplit.splitInterval();
@@ -94,10 +94,10 @@ void setup() {
   
   END = stateMgr.addState(new End(stateMgr, 10000));
   
-  stateMgr.setState(GRASS);  
+  stateMgr.setState(STORM);  
   
-  ambient = new SoundFile(this, "sound/ambient.mp3");
-  ambient.loop();
+  //ambient = new SoundFile(this, "sound/ambient.mp3");
+  //ambient.loop();
   
   println("Time Intervals: ", Arrays.toString(splitDurations));
   println("Order of Intervals: ", Arrays.toString(splitOrder));

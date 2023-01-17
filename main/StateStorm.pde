@@ -67,10 +67,14 @@ class Storm extends BaseState {
     background(40, alphaStorm);
     fill(gradients[nextID][1],255 - alphaStorm);
     rect(0,height/2,width,height);
-
-    setGradient(0, 0, width, height/2, color(100, alphaStorm), color(40, alphaStorm));
-    setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alphaStorm), color(gradients[nextID][1], 255-alphaStorm));
+    
+    
+    
+    setGradientStorm(0, 0, width, height/2, color(100), color(40), false); 
+    setGradientStorm(0, 0, width, height/2, color(gradients[nextID][0]), color(gradients[nextID][1]), true);
         
+    
+    
     //Draw floor Rain with increasing time by mapping it to the duration
     int start = super.stateMgr.stateStamp;
     int timeNow = millis();//super.stateMgr.getTimeInState();
@@ -119,14 +123,16 @@ class Storm extends BaseState {
     }
   }  
   
-  void setGradient(int x, int y, float w, float h, color c1, color c2) {  
+  void setGradientStorm(int x, int y, float w, float h, color c1, color c2, boolean alpha) {  
+    int _alpha = alpha ? 255 - alphaStorm : 255;
     for (int i = y; i <= y+h; i++) {
       float inter = map(i, y, y+h, 0, 1);
       color c = lerpColor(c1, c2, inter);
       strokeWeight(2);
-      stroke(c);
+      stroke(c, _alpha);
       line(x, i, x+w, i);
     }
+    noStroke();
   }
   
 }
