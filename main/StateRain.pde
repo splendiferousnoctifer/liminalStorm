@@ -48,8 +48,8 @@ class Rain extends BaseState{
     fill(gradients[nextID][1],255 - alphaRain);
     rect(0,height/2,width,height);
     
-    setGradient(0, 0, width, height/2, color(122, 172, 172,alphaRain), color(0, 65, 75,alphaRain));
-    setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alphaRain), color(gradients[nextID][1], 255-alphaRain));
+    //setGradient(0, 0, width, height/2, color(122, 172, 172,alphaRain), color(0, 65, 75,alphaRain));
+   // setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alphaRain), color(gradients[nextID][1], 255-alphaRain));
 
   
     //text((int)frameRate + " FPS", width / 2, 10);
@@ -75,13 +75,22 @@ class Rain extends BaseState{
     }
           
     for (int i = 0; i<drawAmountDrops;i++){
-      drops[i].fall();
+      //drops[i].fall();
     }
     
     for (int i=0;i<drawAmountPuddles;i++){
       puddles[i].grow();
     }
     
+
+
+    fill(0, 255/4);
+    rect(0,0,width,height);
+    
+    fill(255);
+    textSize(40);
+//    text("What is the Deep Space?", width/2, height/4);
+        text("What else would you like to include?", width/2, height/4);
 
     
     //if(osCompatible) drawRainPath(img3);
@@ -174,7 +183,7 @@ class Puddle{
       stroke(255);
       strokeWeight(1);
       d=d1+(y-height);
-      ellipse(x,y,rain/10,rain/10);
+      ellipse(x,y-wallHeight,rain/10,rain/10);
       rain=rain+7;
       if(rain>d){
         rain=0;

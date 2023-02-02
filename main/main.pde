@@ -9,7 +9,7 @@ SoundFile ambient;
 float cursor_size = 25;
 PFont font;
 
-public int scaleFactor = 4;
+public int scaleFactor = 3;
 public int windowWidth = 3840/scaleFactor;
 public int windowHeight = 2160*2/scaleFactor;
 public int wallHeight = windowHeight/2;
@@ -80,7 +80,7 @@ void setup() {
   noStroke();
   
   if (debug){
-    splitDurations = new int[] {300,300,300,300, 30000};
+    splitDurations = new int[] {20000,20000,20000,20000, 20000};
     splitOrder = new int[] {1,2,3,4};
   } else {
     splitDurations = timeSplit.splitInterval();
@@ -94,7 +94,7 @@ void setup() {
   
   END = stateMgr.addState(new End(stateMgr, 10000));
   
-  stateMgr.setState(STORM);  
+  stateMgr.setState(RAIN);  
   
   //ambient = new SoundFile(this, "sound/ambient.mp3");
   //ambient.loop();
@@ -217,18 +217,18 @@ void loadImages(){
   fl4 = loadImage(f4);
   fl5 = loadImage(f5);
  
- fl1.resize(0,screen_cursor);
- fl2.resize(0,screen_cursor);
- fl3.resize(0,screen_cursor);
- fl4.resize(0,screen_cursor);
- fl5.resize(0,screen_cursor);
- 
- flowers[0] = fl1;
- flowers[1] = fl2;
- flowers[2] = fl3;
- flowers[3] = fl4;
- flowers[4] = fl5;
- 
+  fl1.resize(0,screen_cursor);
+  fl2.resize(0,screen_cursor);
+  fl3.resize(0,screen_cursor);
+  fl4.resize(0,screen_cursor);
+  fl5.resize(0,screen_cursor);
+   
+  flowers[0] = fl1;
+  flowers[1] = fl2;
+  flowers[2] = fl3;
+  flowers[3] = fl4;
+  flowers[4] = fl5;
+   
   // winter path
   wi0 = loadImage(w0);
   wi1 = loadImage(w1);
@@ -242,11 +242,11 @@ void loadImages(){
   wi3.resize(0,screen_cursor);
   wi4.resize(0,screen_cursor);
   
- snows[0] = wi0;
- snows[1] = wi1;
- snows[2] = wi2;
- snows[3] = wi3;
- snows[4] = wi4;
+  snows[0] = wi0;
+  snows[1] = wi1;
+  snows[2] = wi2;
+  snows[3] = wi3;
+  snows[4] = wi4;
  
   grass = new SoundFile(this, s6);
  // rain = new SoundFile(this, s7);

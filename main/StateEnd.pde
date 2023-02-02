@@ -13,7 +13,7 @@ class End extends BaseState {
     fill(255);
 
     textSize(60);
-    text("Liminal Storm", width/2, wallHeight/2);
+    text("Liminal Seasons", width/2, wallHeight/2);
     
     textSize(18);
     text("Rita Hainzl, Jessica Studwell, Samuel Zühlke", width/2, wallHeight/2 + 50);

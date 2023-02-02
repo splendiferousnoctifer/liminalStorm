@@ -41,13 +41,21 @@ class Grass extends BaseState {
     background(73, 106, 45);
     fill(gradients[nextID][1],255 - alpha);
     rect(0,height/2,width,height);
+    
+    
 
-
-    setGradient(0, 0, width, height/2, color(177, 213, 174, alpha), color(73, 106, 45,alpha));
-    setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alpha), color(gradients[nextID][1], 255-alpha));
+    //setGradient(0, 0, width, height/2, color(177, 213, 174, alpha), color(73, 106, 45,alpha));
+    //setGradient(0, 0, width, height/2, color(gradients[nextID][0],255 - alpha), color(gradients[nextID][1], 255-alpha));
 
     
     grassFloor();
+    
+    fill(0, 255/4);
+    rect(0,0,width,height);
+    
+    fill(255);
+    textSize(40);
+    text("What is liminalSeasons?", width/2, height/4);
     //grassWall();
     
     //text((int)frameRate + " FPS", width / 2, 100);
@@ -88,7 +96,7 @@ class Grass extends BaseState {
         fill(255);
         noStroke();
         push();
-          translate(j * scl + displace[i][j], i * scl + wallHeight + displace[i][j]);
+          translate(j * scl + displace[i][j], i * scl + displace[i][j]);
           rotate(vector.heading());
           quad(0,0,0,1,lenGrass,lenGrass,1,0);
         pop();

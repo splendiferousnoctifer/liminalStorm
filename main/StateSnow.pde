@@ -109,6 +109,14 @@ class Snow extends BaseState {
     }
     
     //if(osCompatible) drawWinterPath(w1);
+    
+    fill(0, 255/4);
+    rect(0,0,width,height);
+    
+    fill(255);
+    textSize(40);
+    text("What was your part in the project?", width/2, height/4);
+
   } 
   
   void setGradient(int x, int y, float w, float h, color c1, color c2) {  

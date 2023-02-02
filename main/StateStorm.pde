@@ -121,6 +121,12 @@ class Storm extends BaseState {
         noFill();
       }
     }
+      fill(0, 255/4);
+    rect(0,0,width,height);
+    
+    fill(255);
+    textSize(40);
+    text("What problems did you face?", width/2, height/4);
   }  
   
   void setGradientStorm(int x, int y, float w, float h, color c1, color c2, boolean alpha) {  
